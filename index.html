@@ -65,6 +65,7 @@
 </div>
 
 <script>
+(function(){
   var canvas=document.getElementById("game");
   var ctx=canvas.getContext("2d");
 
@@ -75,6 +76,7 @@
   ctx.beginPath();
   ctx.arc(100,150,50,0,2*Math.PI,true);
   ctx.fill();
+})();
 </script>
 
 </body>
