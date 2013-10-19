@@ -24,7 +24,7 @@ var gameModule = (function(){
     timeoutVar = setTimeout(start,1000);
     counter = counter + 1;
 
-    console.log("Counter: "+counter)
+    console.log("Counter: "+counter);
   }
   }
   return{
