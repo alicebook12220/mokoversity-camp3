@@ -12,5 +12,5 @@ exports.list = function(req, res){
 exports.save = function(req, res){
   scores.push(req.query.scores);
 
-  console.log("Your scores: " + scores);
+  console.log("[SERVER] Your scores: " + scores); 
 };

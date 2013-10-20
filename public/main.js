@@ -1,60 +1,73 @@
-var gameModule = (function(){
-  var timeoutVar,
-      counter = 0,
-      ballX,
-      ballY,
-      ballR,
-      scores,
-      colors = ['#ff0000', '#0000ff', 'yellow'],
-      length = colors.length;
+/*jslint browser: true, devel: true, closure: true */
 
-  function touchEvent(evt){
-    var x=evt.clientX,
-        y=evt.clientY;
-        tmp=(ballX-x)*(ballX-x)+(ballY-y)*(ballY-y);
+var gameModule = (function (document, $) {
 
-    console.log("Clicked: "+x+" , "+y);
+    "use strict";
 
-    if(tmp<ballR*ballR){
-      scores=scores+(100-ballR);
-      console.log("Hit! your scores: "+scores);
+    var counter = 0,
+        ballX,
+        ballY,
+        ballR,
+        scores,
+        colors = ['#ff0000', '#0000ff', 'yellow'],
+        length = colors.length;
+
+    function gameOver() {
+        console.log("Final: " + scores);
+
+        var api = "http://127.0.0.1:3000/scores?scores=" + scores;
+
+        $.ajax({ url: api});
     }
-  }
 
-  function start(){
-    scores=0;
-    document.getElementById("main").addEventListener("click", touchEvent,false);
-    startGame();
-  }
+    function startGame() {
+        var canvas = document.getElementById('game'),
+            ctx = canvas.getContext('2d');
 
-  function startGame(){
-    var canvas=document.getElementById("game");
-  var ctx=canvas.getContext("2d");
+        ballX = Math.floor(Math.random() * 600); // 0..300
+        ballY = Math.floor(Math.random() * 450);
+        ballR = Math.floor(Math.random() * 80);
 
-      ballX=Math.floor(Math.random()*600); 
-      ballY=Math.floor(Math.random()*450);
-      ballR=Math.floor(Math.random()*80);
+        canvas.width = 640;
+        canvas.height = 480;
 
-  canvas.width = 640;
-  canvas.height = 480;
+        ctx.fillStyle = colors[counter % length];
+        ctx.beginPath();
+        ctx.arc(ballX, ballY, ballR, 0, Math.PI * 2, true);
+        ctx.fill();
 
-  ctx.fillStyle =colors[counter % length];
-  ctx.beginPath();
-  ctx.arc(ballX,ballY,ballR,0,2*Math.PI,true);
-  ctx.fill();
-
-    if(counter >= 10){
-      GameOver();
-    }else{
-      timeoutVar = setTimeout(startGame,1000);
-      counter = counter + 1;
+        if (counter >= 7) {
+            gameOver();
+        } else {
+            setTimeout(startGame, 1000);
+            counter = counter + 1;
+        }
     }
-    function GameOver(){
-      console.log("Final: "+scores);
+
+    function touchEvent(evt) {
+        var x = evt.clientX,
+            y = evt.clientY,
+            tmp = (ballX - x) * (ballX - x) + (ballY - y) * (ballY - y);
+
+        console.log("Clicked: " + x + " , " + y);
+
+        if (tmp < ballR * ballR) {
+            scores = scores + (100 - ballR);
+            console.log("Hit ! Your scores: " + scores);
+        }
     }
-  }
-  return{
-    start:start
-  }
-})();
+
+    function start() {
+        scores = 0;
+
+        document.getElementById("main").addEventListener("click", touchEvent, false);
+        startGame();
+    }
+
+    return {
+        start: start
+    };
+
+}(document, $));
+
 gameModule.start();
