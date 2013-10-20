@@ -4,7 +4,7 @@ var gameModule = (function(){
       ballX,
       ballY,
       ballR,
-
+      scores,
       colors = ['#ff0000', '#0000ff', 'yellow'],
       length = colors.length;
 
@@ -16,13 +16,13 @@ var gameModule = (function(){
     console.log("Clicked: "+x+" , "+y);
 
     if(tmp<ballR*ballR){
-
-      console.log("Hit! your scores: ");
+      scores=scores+(100-ballR);
+      console.log("Hit! your scores: "+scores);
     }
   }
 
   function start(){
-
+    scores=0;
     document.getElementById("main").addEventListener("click", touchEvent,false);
     startGame();
   }
